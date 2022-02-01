@@ -7,7 +7,8 @@
     "require": {
         "php": "^7.4 | ^8.0",
         "illuminate/database": "8.x-dev",
-        "illuminate/events": "8.x-dev"
+        "illuminate/events": "8.x-dev",
+        "nikic/fast-route": "2.0.x-dev"
 
     },
     "autoload": {
