@@ -12,9 +12,11 @@ class User extends Model implements IdentityInterface
 
     public $timestamps = false;
     protected $fillable = [
-        'name',
-        'login',
-        'password'
+        'username',
+        'password',
+        'firstname',
+        'lastname',
+        'birth_date',
     ];
 
     protected static function booted()
@@ -37,7 +39,7 @@ class User extends Model implements IdentityInterface
 
     public function attemptIdentity(array $credentials)
     {
-        return self::where(['login' => $credentials['login'],
+        return self::where(['username' => $credentials['username'],
             'password' => md5($credentials['password'])])->first();
     }
 }

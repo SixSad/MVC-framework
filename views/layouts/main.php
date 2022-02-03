@@ -14,13 +14,13 @@
     <title>Pop it MVC</title>
 </head>
 <body>
-<div class="container-fluid p-0">
-    <header class=" d-flex  flex-column flex-md-row align-items-center justify-content-center justify-content-md-between py-3 shadow bg-white rounded"
-            style="padding: 0px 100px">
+<div class="container-fluid p-0 mw-100">
+    <header class=" d-flex  flex-column flex-md-row align-items-center justify-content-center justify-content-md-between py-3 shadow bg-white rounded "
+            style="padding: 0px 100px;">
 
         <div class="d-flex flex-row">
             <h2><a href="<?= app()->route->getUrl('/hello') ?>"
-                   class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none a">
+                   class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none a ">
                     ЦСМ
                 </a></h2>
             <div class="dropdown ms-4">
@@ -28,9 +28,21 @@
                     Услуги
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Цены</a></li>
-                    <li><a class="dropdown-item" href="#">О нас</a></li>
-                    <li><a class="dropdown-item" href="#">Контакты</a></li>
+                    <?php
+                    if (!app()->auth::check()):
+                    ?>
+                        <li><a class="dropdown-item" href="#">Цены</a></li>
+                        <li><a class="dropdown-item" href="#">О нас</a></li>
+                        <li><a class="dropdown-item" href="#">Контакты</a></li>
+                    <?php
+                    else:
+                    ?>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться на прием</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments') ?>">Записи на прием</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
+                    <?php
+                    endif;
+                    ?>
                 </ul>
             </div>
 
@@ -51,15 +63,15 @@
             else:
                 ?>
                 <div class="dropdown ms-4">
-                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="" alt="mdo" width="32" height="32" class="rounded-circle">
-                        <?= app() -> auth::user()->name;?>
-                    </a>
+                    <a href="#" class="d-block link-dark  dropdown-toggle fs-3" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                           <?= app() -> auth::user()->firstname;?>
+                        </a>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Профиль</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/profile') ?>">Профиль</a></li>
                         <li><a class="dropdown-item" href="#">Изменить данные</a></li>
                         <li><a class="dropdown-item" href="#">Изменить пароль</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/logout') ?>">Выйти</a></li>
                     </ul>
                 </div>
             <?php
@@ -69,14 +81,15 @@
         </div>
     </header>
 
-    <main class="row">
+    <main class="pt-5" style="margin: 0px 100px; min-height: 850px">
         <?= $content ?? '' ?>
     </main>
 
-    <footer class="mt-3 border-top">
-    </footer>
 
 </div>
-
+<footer class="fixed-bottom bg-dark ">
+    <div class="container" style="max-height:200px;min-height: 50px">
+    </div>
+</footer>
 </body>
 </html>
