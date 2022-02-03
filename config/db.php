@@ -2,7 +2,7 @@
 return [
     'driver' => 'mysql',
     'host' => 'localhost',
-    'database' => 'practice',
+    'database' => 'medical',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',
