@@ -10,14 +10,15 @@ use FastRoute\DataGenerator\MarkBased;
 use FastRoute\Dispatcher\MarkBased as Dispatcher;
 use Src\Traits\SingletonTrait;
 
+
 class Route
 {
     use SingletonTrait;
 
     private string $currentRoute = '';
     private $currentHttpMethod;
-
     private string $prefix = '';
+
 
     private RouteCollector $routeCollector;
 
@@ -51,10 +52,10 @@ class Route
         header('Location: ' . $this->getUrl($url));
     }
 
-    public function getUrl(string $url): string
-    {
-        return $this->prefix . $url;
-    }
+        public function getUrl(string $url): string
+        {
+            return $this->prefix . $url;
+        }
 
     public function middleware(...$middlewares): self
     {
@@ -84,11 +85,12 @@ class Route
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = array_values($routeInfo[2]);
-                $vars[] = Middleware::single()->runMiddlewares($httpMethod, $uri);
+                $vars[] = Middleware::single()->go($httpMethod, $uri, new Request());
                 $class = $handler[0];
                 $action = $handler[1];
                 call_user_func([new $class, $action], ...$vars);
                 break;
         }
     }
+
 }

@@ -10,6 +10,7 @@ use Model\Diagnoses;
 use Src\View;
 use Src\Request;
 use Src\Auth\Auth;
+use Src\Validator\Validator;
 
 class Site
 {
@@ -19,27 +20,54 @@ class Site
     }
 
 
+//    public function signup(Request $request): string
+//    {
+//        $errors = [];
+//        foreach ($_POST as $key => $value){
+//            if(empty($value)){
+//                array_push($errors,$key);
+//            }
+//        }
+//        if($errors){
+//            return new View('site.signup', ['message' => 'Заполните все поля']);
+//        }
+//        if ($request->method === 'POST' && User::where('username',$request->password)->first()) {
+//            return new View('site.signup', ['message' => 'Данный пользователь зарегистрирован']);
+//        }
+//
+//
+//        if ($request->method === 'POST' && User::create($request->all())) {
+//            app()->route->redirect('/hello');
+//        }
+//
+//
+//        return new View('site.signup');
+//    }
+
     public function signup(Request $request): string
     {
-        $errors = [];
-        foreach ($_POST as $key => $value){
-            if(empty($value)){
-                array_push($errors,$key);
+        if ($request->method === 'POST') {
+
+            $validator = new Validator($request->all(), [
+                'firstname' => ['required'],
+                'lastname' => ['required'],
+                'birth_date' => ['required'],
+                'username' => ['required', 'unique:users,username'],
+                'password' => ['required']
+            ], [
+                'required' => 'Поле :field пусто',
+                'unique' => 'Поле :field должно быть уникально'
+            ]);
+
+            if($validator->fails()){
+                return new View('site.signup',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
+            }
+
+            if (User::create($request->all())) {
+                app()->route->redirect('/login');
             }
         }
-        if($errors){
-            return new View('site.signup', ['message' => 'Заполните все поля']);
-        }
-        if ($request->method === 'POST' && User::where('username',$request->password)->first()) {
-            return new View('site.signup', ['message' => 'Данный пользователь зарегистрирован']);
-        }
-
-
-        if ($request->method === 'POST' && User::create($request->all())) {
-            app()->route->redirect('/hello');
-        }
-
-
         return new View('site.signup');
     }
 
@@ -72,7 +100,11 @@ class Site
         return (new View())->render('site.appointments', ['appointments' => $appointments]);
     }
 
-    public function diagnosis(): string{
+    public function diagnosis(Request $request): string{
+        if($request ->method === 'POST'){
+            $q = $request['search'];
+
+        }
         $diagnosis = Diagnoses::all();
         return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
     }

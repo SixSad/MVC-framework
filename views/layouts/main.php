@@ -1,4 +1,4 @@
-<!doctype html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -93,8 +93,7 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/profile') ?>">Профиль</a></li>
-                        <li><a class="dropdown-item" href="#">Изменить данные</a></li>
-                        <li><a class="dropdown-item" href="#">Изменить пароль</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/logout') ?>">Выйти</a></li>
                     </ul>
                 </div>
             <?php

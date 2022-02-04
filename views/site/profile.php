@@ -34,8 +34,8 @@
                               style="background-color: lightgreen; height: 25px; width: 25px;"></span>
                         <div class="" style="margin-top: 30px;">
                             <button type="button" class="btn btn-outline-primary rounded-pill fs-5"
-                                    onclick='window.location.href="<?= app()->route->getUrl('/logout') ?>"'
-                                    style="padding: 10px 80px">Выйти
+                                    onclick='window.location.href="<?= app()->route->getUrl('/profile') ?>"'
+                                    style="padding: 10px 80px">Редактировать
                             </button>
                         </div>
                     </div>

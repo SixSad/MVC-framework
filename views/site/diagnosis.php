@@ -2,11 +2,11 @@
 <div class="container">
     <section class="w-100 p-4 pb-4 d-flex justify-content-center align-items-center flex-column">
         <div>
-            <div class="input-group">
+            <form action="" method="post" class="d-flex" name="search">
                 <input type="search" class="form-control rounded" placeholder="Диагноз" aria-label="Search"
                        aria-describedby="search-addon">
-                <button type="button" class="btn btn-outline-primary" style="">Найти</button>
-            </div>
+                <button type="submit" class="btn btn-outline-primary" style="">Найти</button>
+            </form>
         </div>
     </section>
 </div>
