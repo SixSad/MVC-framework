@@ -8,15 +8,35 @@
                              alt="Generic placeholder image" class="img-fluid"
                              style="width: 200px; border-radius: 10px;">
                         <div class="ms-4 ">
-                            <h4 class="mb-1"><?= app() -> auth::user()->firstname;?></h4>
-                            <h4 class="mb-1"><?= app() -> auth::user()->lastname;?></h4>
+                            <h4 class="mb-2"><?= app()->auth::user()->firstname; ?></h4>
+                            <h4 class="mb-1"><?= app()->auth::user()->lastname; ?></h4>
+                            <?php
+                            if (app()->auth::role()==3):
+                            ?>
+                            <h4 class="mt-5">Админ</h4>
+                            <?php
+                            elseif (app()->auth::role()==2):
+                            ?>
+                                <h4 class="mt-5">Доктор</h4>
+                            <?php
+                            else:
+                            ?>
+                            <h4 class="mt-5">Пациент</h4>
+                            <?php
+                            endif;
+                            ?>
+
                         </div>
                     </div>
 
                     <div class="d-flex flex-column justify-content-between align-items-end">
-                        <span class="rounded-circle" style="background-color: lightgreen; height: 25px; width: 25px;"></span>
+                        <span class="rounded-circle"
+                              style="background-color: lightgreen; height: 25px; width: 25px;"></span>
                         <div class="" style="margin-top: 30px;">
-                            <button type="button" class="btn btn-outline-primary rounded-pill fs-5" onclick='window.location.href="<?= app()->route->getUrl('/logout') ?>"' style="padding: 10px 80px">Выйти</button>
+                            <button type="button" class="btn btn-outline-primary rounded-pill fs-5"
+                                    onclick='window.location.href="<?= app()->route->getUrl('/logout') ?>"'
+                                    style="padding: 10px 80px">Выйти
+                            </button>
                         </div>
                     </div>
 

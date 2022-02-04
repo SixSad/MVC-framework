@@ -15,14 +15,9 @@ class Site
 {
     public function index(Request $request): string
     {
-        $posts = Post::all();
-        return (new View())->render('site.index', ['posts' => $posts]);
+        return new View('site.index');
     }
 
-    public function hello(): string
-    {
-        return new View('site.index', ['message' => 'hello working']);
-    }
 
     public function signup(Request $request): string
     {
@@ -56,7 +51,7 @@ class Site
         }
         //Если удалось аутентифицировать пользователя, то редирект
         if (Auth::attempt($request->all())) {
-            app()->route->redirect('/hello');
+            app()->route->redirect('/');
         }
         //Если аутентификация не удалась, то сообщение об ошибке
         return new View('site.login', ['message' => 'Неправильные логин или пароль']);
@@ -65,7 +60,7 @@ class Site
     public function logout(): void
     {
         Auth::logout();
-        app()->route->redirect('/hello');
+        app()->route->redirect('/');
     }
 
     public function profile(): string{
@@ -89,4 +84,30 @@ class Site
         return new View('site.new_appointment');
     }
 
+    public function error403(): string{
+        return new View('site.error403');
+    }
+
+    public function create_user(Request $request): string
+    {
+        $errors = [];
+        foreach ($_POST as $key => $value){
+            if(empty($value)){
+                array_push($errors,$key);
+            }
+        }
+        if($errors){
+            return new View('site.create_user', ['message' => 'Заполните все поля']);
+        }
+        if ($request->method === 'POST' && User::where('username',$request->password)->first()) {
+            return new View('site.create_user', ['message' => 'Данный пользователь зарегистрирован']);
+        }
+
+        if ($request->method === 'POST' && User::create($request->all())) {
+            app()->route->redirect('/hello');
+        }
+
+
+        return new View('site.create_user');
+    }
 }

@@ -3,9 +3,9 @@
     <section class="w-100 p-4 pb-4 d-flex justify-content-center align-items-center flex-column">
         <div>
             <div class="input-group">
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                <input type="search" class="form-control rounded" placeholder="Диагноз" aria-label="Search"
                        aria-describedby="search-addon">
-                <button type="button" class="btn btn-outline-primary" style="">search</button>
+                <button type="button" class="btn btn-outline-primary" style="">Найти</button>
             </div>
         </div>
     </section>

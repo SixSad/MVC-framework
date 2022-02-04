@@ -31,6 +31,10 @@ class Auth
         return false;
     }
 
+    public static function role(){
+        return self::user()['role_id'];
+    }
+
     public static function user()
     {
         $id = Session::get('id') ?? 0;
