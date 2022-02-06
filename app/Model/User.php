@@ -43,4 +43,5 @@ class User extends Model implements IdentityInterface
         return self::where(['username' => $credentials['username'],
             'password' => md5($credentials['password'])])->first();
     }
+
 }

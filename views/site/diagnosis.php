@@ -2,10 +2,10 @@
 <div class="container">
     <section class="w-100 p-4 pb-4 d-flex justify-content-center align-items-center flex-column">
         <div>
-            <form action="" method="post" class="d-flex" name="search">
-                <input type="search" class="form-control rounded" placeholder="Диагноз" aria-label="Search"
-                       aria-describedby="search-addon">
-                <button type="submit" class="btn btn-outline-primary" style="">Найти</button>
+            <form action="" method="get" class="d-flex">
+
+                <input type="text" class="form-control rounded" placeholder="Диагноз" name="search">
+                <button type="submit" class="btn btn-outline-primary">Найти</button>
             </form>
         </div>
     </section>
@@ -21,10 +21,14 @@
         </thead>
         <tbody>
         <?php
+        if(isset($diagnosis[0])){
+            foreach ($diagnosis as $diagnose) {
+                echo '<tr><th scope="row">' . $diagnose->id . '</th> <td>' . $diagnose->title . '</td> <td>' . $diagnose->description . '</td>        </tr>';
 
-        foreach ($diagnosis as $diagnose) {
-            echo '<tr><th scope="row">' . $diagnose->id . '</th> <td>' . $diagnose->title . '</td> <td>' . $diagnose->description . '</td>        </tr>';
-
+            }
+        }
+        else{
+            echo "<h2 class='text-center text-secondary'>Таких записей нет</h2>";
         }
         ?>
 

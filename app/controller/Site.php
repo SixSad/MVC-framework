@@ -3,6 +3,7 @@
 namespace Controller;
 
 use http\Message;
+use Illuminate\Support\Facades\App;
 use Model\Appointments;
 use Model\User;
 use Model\Post;
@@ -47,16 +48,18 @@ class Site
     public function signup(Request $request): string
     {
         if ($request->method === 'POST') {
-
             $validator = new Validator($request->all(), [
                 'firstname' => ['required'],
                 'lastname' => ['required'],
-                'birth_date' => ['required'],
-                'username' => ['required', 'unique:users,username'],
-                'password' => ['required']
+                'birth_date' => ['required','birthdate'],
+                'username' => ['required', 'unique:users,username', 'latina'],
+                'password' => ['required', 'length']
             ], [
-                'required' => 'Поле :field пусто',
-                'unique' => 'Поле :field должно быть уникально'
+                'required' => 'Поле: field пусто',
+                'unique' => 'Поле: field должно быть уникально',
+                'latina' => 'Поле: Логин принимает (a-z;0-9)',
+                'length' => 'Поле: должно содержать минимум 8 символов',
+                'birthdate'=>'Поле: введите правильную дату',
             ]);
 
             if($validator->fails()){
@@ -95,25 +98,73 @@ class Site
         return new View('site.profile');
     }
 
-    public function appointments(): string{
+    public function patientAppointments(): string{
         $appointments = Appointments::all();
-        return (new View())->render('site.appointments', ['appointments' => $appointments]);
+        return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
+    }
+
+    public function doctorAppointments(Request $request): string{
+        if($request ->method === 'GET') {
+            $appointments = Appointments::all();
+            if (!empty($_GET['search_patient'])) {
+                $q = $request->get('search_patient');
+                $user = User::where('firstname',$q)->first();
+                if(!empty($user)){
+                    $appointments = Appointments::where('patient_id',$user['id'])->get();
+                }
+                else{
+                    $appointments = [];
+                }
+            }
+            if (!empty($_GET['search_date'])) {
+                $q = $request->get('search_date');
+                $appointments = Appointments::where('date',$q)->get();
+            }
+            return (new View())->render('site.doctorAppointments', ['appointments' => $appointments]);
+        }
     }
 
     public function diagnosis(Request $request): string{
-        if($request ->method === 'POST'){
-            $q = $request['search'];
-
+        if($request ->method === 'GET') {
+            if(!empty($_GET['search'])) {
+                $q = $request->get('search');
+                $diagnosis = Diagnoses::where('title', $q)->get();
+                return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
+            }
+            else{
+                $diagnosis = Diagnoses::all();
+                return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
+            }
         }
-        $diagnosis = Diagnoses::all();
-        return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
     }
 
-    public function appointmentsCreate(Request $request): string{
-        if ($request->method === 'POST') {
-            app()->route->redirect('/hello');
+    public function appointmentsCreate(Request $request): string
+    {
+        $doctors = User::where('role_id', '2')->get();
+        if ($request->method === 'GET') {
+            return (new View())->render('site.new_appointment', ['doctors' => $doctors]);
         }
-        return new View('site.new_appointment');
+
+        if ($request->method === 'POST') {
+            $validator = new Validator($request->all(), [
+                'date' => ['date'],
+                'doctor_id' => ['required']
+            ], [
+                'required' => 'Поле: field пусто',
+                'date' => 'Поле: введите корректную дату',
+
+            ]);
+
+            if ($validator->fails()) {
+                return new View('site.new_appointment',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'doctors' => $doctors]);
+            }
+
+            if (Appointments::create($request->all())) {
+                return new View('site.new_appointment',
+                    ['message' => "<p class='text-success'>Вы записались на прием</p>", 'doctors' => $doctors]);
+            }
+        }
     }
 
     public function error403(): string{
@@ -122,24 +173,30 @@ class Site
 
     public function create_user(Request $request): string
     {
-        $errors = [];
-        foreach ($_POST as $key => $value){
-            if(empty($value)){
-                array_push($errors,$key);
+        if ($request->method === 'POST') {
+            $validator = new Validator($request->all(), [
+                'firstname' => ['required'],
+                'lastname' => ['required'],
+                'birth_date' => ['required', 'birthdate'],
+                'username' => ['required', 'unique:users,username', 'latina'],
+                'password' => ['required', 'length']
+            ], [
+                'required' => 'Поле: field пусто',
+                'unique' => 'Поле: field должно быть уникально',
+                'latina' => 'Поле: Логин принимает (a-z;0-9)',
+                'length' => 'Поле: должно содержать минимум 8 символов',
+                'birthdate' => 'Поле: введите правильную дату',
+            ]);
+
+            if ($validator->fails()) {
+                return new View('site.create_user',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
+            }
+            if (User::create($request->all())) {
+                return new View('site.create_user',
+                    ['message' => "<p class='text-success'>Пользователь успешно создан</p>"]);
             }
         }
-        if($errors){
-            return new View('site.create_user', ['message' => 'Заполните все поля']);
-        }
-        if ($request->method === 'POST' && User::where('username',$request->password)->first()) {
-            return new View('site.create_user', ['message' => 'Данный пользователь зарегистрирован']);
-        }
-
-        if ($request->method === 'POST' && User::create($request->all())) {
-            app()->route->redirect('/hello');
-        }
-
-
         return new View('site.create_user');
     }
 }

@@ -1,4 +1,4 @@
-<div class="row d-flex justify-content-center align-items-center h-100">
+<div class="row d-flex justify-content-center  h-100">
     <div class="col col-md-9 col-lg-12 col-xl-8">
         <div class="card bg-light" style="border-radius: 15px;">
             <div class="card-body p-4 d-flex flex-column justify-content-center" style="height: 300px">

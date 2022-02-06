@@ -14,7 +14,13 @@ return [
     ],
     'validators' => [
         'required' => \Validators\RequireValidator::class,
-        'unique' => \Validators\UniqueValidator::class
+        'unique' => \Validators\UniqueValidator::class,
+        'latina' => \Validators\LatinaValidator::class,
+        'length' => \Validators\LengthValidator::class,
+        'date' => \Validators\DateValidator::class,
+        'birthdate' => \Validators\BirthdateValidator::class,
+
+
     ]
 
 ];

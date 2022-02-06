@@ -38,7 +38,7 @@
                         ?>
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
                                 на прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments') ?>">Записи на
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
                                 прием</a></li>
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/create_user') ?>">Создать
@@ -46,7 +46,7 @@
                     <?php
                     elseif (app()->auth::role() == 2):
                         ?>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments') ?>">Записи на
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
                                 прием</a></li>
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
                     <?php
@@ -54,7 +54,7 @@
                         ?>
                         <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
                                 на прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments') ?>">Ваши записи</a></li>
+                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsp') ?>">Ваши записи</a></li>
 
                     <?php
                     else:

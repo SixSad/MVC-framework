@@ -3,6 +3,7 @@
     <div class=" col-md-4 offset-md-4 shadow bg-white  my-4" style="padding: 50px 100px;border-radius: 40px;">
         <div class="form-container d-flex flex-column ">
             <form class="row g-3" method="post">
+                <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>">
                 <h1 class="text-center">Создать пользователя</h1>
                 <b class="text-center text-danger"><?= $message ?? ''; ?></b>
                 <div class="col-12">
