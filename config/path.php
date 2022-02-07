@@ -2,6 +2,7 @@
 return [
     'root' => 'practice',
     'routes' => 'routes',
-    'views' => 'views'
+    'views' => 'views',
+    'files' => 'public/files',
 ];
 

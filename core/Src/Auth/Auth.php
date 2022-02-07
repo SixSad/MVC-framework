@@ -32,7 +32,7 @@ class Auth
     }
 
     public static function role(){
-        return self::user()['role_id'];
+        return self::user()['role_id']??'';
     }
 
     public static function user()

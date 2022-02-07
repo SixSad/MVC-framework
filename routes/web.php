@@ -15,3 +15,4 @@ Route::add(['GET','POST'],'/appointments/create', [Controller\Site::class, 'appo
 Route::add('GET', '/error403', [Controller\Site::class, 'error403']);
 Route::add(['GET','POST'], '/create_user', [Controller\Site::class, 'create_user'])->middleware('admin');
 Route::add(['GET','POST'], '/diagnosis/update', [Controller\Site::class, 'update_diagnosis'])->middleware('doctor');
+Route::add(['GET','POST'], '/diagnosis/create', [Controller\Site::class, 'create_diagnosis'])->middleware('doctor');

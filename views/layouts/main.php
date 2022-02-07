@@ -34,8 +34,9 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
                     <?php
-                    if (app()->auth::role()):
-                        $role = app()->auth::role();
+                    use Src\Auth\Auth;
+                    $role = Auth::role() ;
+                    if(!empty($role)):
                         if ($role ==3):
                             ?>
                             <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
@@ -63,6 +64,7 @@
                     <?php
                     else:
                         ?>
+
                         <li><a class="dropdown-item" href="#">Цены</a></li>
                         <li><a class="dropdown-item" href="#">О нас</a></li>
                         <li><a class="dropdown-item" href="#">Контакты</a></li>

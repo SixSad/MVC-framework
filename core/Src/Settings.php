@@ -31,6 +31,11 @@ class Settings
         return '/' . $this->path['views'] ?? '';
     }
 
+    public function getFilePath(): string
+    {
+        return '/' . $this->path['files'] ?? '';
+    }
+
     public function getDbSetting(): array
     {
         return $this->db ?? [];

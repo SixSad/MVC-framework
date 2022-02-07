@@ -52,10 +52,10 @@ class Route
         header('Location: ' . $this->getUrl($url));
     }
 
-        public function getUrl(string $url): string
-        {
-            return $this->prefix . $url;
-        }
+    public function getUrl(string $url): string
+    {
+        return $this->prefix . $url;
+    }
 
     public function middleware(...$middlewares): self
     {

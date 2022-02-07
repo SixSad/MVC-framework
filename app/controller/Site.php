@@ -51,7 +51,7 @@ class Site
             $validator = new Validator($request->all(), [
                 'firstname' => ['required'],
                 'lastname' => ['required'],
-                'birth_date' => ['required','birthdate'],
+                'birth_date' => ['required', 'birthdate'],
                 'username' => ['required', 'unique:users,username', 'latina'],
                 'password' => ['required', 'length']
             ], [
@@ -59,10 +59,10 @@ class Site
                 'unique' => 'Поле: field должно быть уникально',
                 'latina' => 'Поле: Логин принимает (a-z;0-9)',
                 'length' => 'Поле: должно содержать минимум 8 символов',
-                'birthdate'=>'Поле: введите правильную дату',
+                'birthdate' => 'Поле: введите правильную дату',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return new View('site.signup',
                     ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
             }
@@ -94,62 +94,64 @@ class Site
         app()->route->redirect('/');
     }
 
-    public function profile(): string{
+    public function profile(): string
+    {
         return new View('site.profile');
     }
 
-    public function patientAppointments(Request $request): string{
-        $user =  app()->auth::user()->id;
-        if($request ->method === 'GET') {
-            $appointments = Appointments::where('patient_id',$user)->get();
+    public function patientAppointments(Request $request): string
+    {
+        $user = app()->auth::user()->id;
+        if ($request->method === 'GET') {
+            $appointments = Appointments::where('patient_id', $user)->get();
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where(['firstname'=>$q],['lastname'=>$q])->first();
-                if(!empty($user)){
-                    $appointments = Appointments::where('patient_id',$user['id'])->get();
-                }
-                else{
+                $user = User::where(['firstname' => $q], ['lastname' => $q])->first();
+                if (!empty($user)) {
+                    $appointments = Appointments::where('patient_id', $user['id'])->get();
+                } else {
                     $appointments = [];
                 }
             }
             if (!empty($_GET['search_date'])) {
                 $q = $request->get('search_date');
-                $appointments = Appointments::where('date',$q)->get();
+                $appointments = Appointments::where('date', $q)->get();
             }
             return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
         }
     }
 
-    public function doctorAppointments(Request $request): string{
-        if($request ->method === 'GET') {
-            $appointments = Appointments::all();
+    public function doctorAppointments(Request $request): string
+    {
+        if ($request->method === 'GET') {
+            $appointments = Appointments::all()->sortBy('-date');
+
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where(['firstname'=>$q],['lastname'=>$q])->first();
-                if(!empty($user)){
-                    $appointments = Appointments::where('patient_id',$user['id'])->get();
-                }
-                else{
+                $user = User::where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%")->first();
+                if (!empty($user)) {
+                    $appointments = Appointments::where('patient_id', $user['id'])->get()->sortBy('-date');
+                } else {
                     $appointments = [];
                 }
             }
             if (!empty($_GET['search_date'])) {
                 $q = $request->get('search_date');
-                $appointments = Appointments::where('date',$q)->get();
+                $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
             }
             return (new View())->render('site.doctorAppointments', ['appointments' => $appointments]);
         }
     }
 
-    public function diagnosis(Request $request): string{
-        if($request ->method === 'GET') {
-            if(!empty($_GET['search'])) {
+    public function diagnosis(Request $request): string
+    {
+        if ($request->method === 'GET') {
+            if (!empty($_GET['search'])) {
                 $q = $request->get('search');
-                $diagnosis = Diagnoses::where('title', $q)->get();
+                $diagnosis = Diagnoses::where('title', 'like', "%$q%")->get()->sortBy('title');
                 return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
-            }
-            else{
-                $diagnosis = Diagnoses::all();
+            } else {
+                $diagnosis = Diagnoses::all()->sortBy('title');
                 return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
             }
         }
@@ -184,7 +186,8 @@ class Site
         }
     }
 
-    public function error403(): string{
+    public function error403(): string
+    {
         return new View('site.error403');
     }
 
@@ -221,10 +224,10 @@ class Site
     {
         $id = $request->get('id');
         $diagnosis = Diagnoses::all();
-        $form = Appointments::where('id',$id)->first();
-        $patient = User::where('id',$form['patient_id'])->first();
-        if($request->method ==='GET'){
-            return new View('site.update_diagnosis',['form'=>$form,'patient'=>$patient,'diagnosis'=>$diagnosis]);
+        $form = Appointments::where('id', $id)->first();
+        $patient = User::where('id', $form['patient_id'])->first();
+        if ($request->method === 'GET') {
+            return new View('site.update_diagnosis', ['form' => $form, 'patient' => $patient, 'diagnosis' => $diagnosis]);
         }
 
         if ($request->method === 'POST') {
@@ -237,10 +240,10 @@ class Site
 
             if ($validator->fails()) {
                 return new View('site.update_diagnosis',
-                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'form'=>$form,'patient'=>$patient,'diagnosis'=>$diagnosis]);
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'form' => $form, 'patient' => $patient, 'diagnosis' => $diagnosis]);
             }
-            $form = Appointments::where('id',$id)->first();
-            $form->diagnosis=$request->get('diagnosis');
+            $form = Appointments::where('id', $id)->first();
+            $form->diagnosis = $request->get('diagnosis');
             $form->save();
             app()->route->redirect('/appointmentsd');
 
@@ -249,5 +252,44 @@ class Site
 //            $form->save();
         }
 
+    }
+
+    public function create_diagnosis(Request $request): string
+    {
+        if ($request->method === 'POST') {
+            $validator = new Validator($request->all(), [
+                'title' => ['required'],
+                'description' => ['required'],
+            ], [
+                'required' => 'Поле: field пусто',
+            ]);
+
+            if ($validator->fails()) {
+                return new View('site.add_diagnosis',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
+            }
+
+            if ($_FILES['file']['error'] == 0) {
+                $image = $_FILES['file']['name'];
+                $tmp_file = $_FILES['file']['tmp_name'];
+                $up_folder = "../" . app()->settings->getFilePath() . "/$image";
+                if (move_uploaded_file($tmp_file, $up_folder)) {
+                    $diagnosis = new Diagnoses();
+                    $diagnosis->title = $request->get('title');
+                    $diagnosis->description = $request->get('description');
+                    $diagnosis->image = app()->settings->getFilePath() . "/$image";
+                    $diagnosis->save();
+                    return new View('site.add_diagnosis',
+                        ['message' => 'Диагноз добавлен']);
+                }
+            } else {
+                return new View('site.add_diagnosis',
+                    ['message' => "<h4 class='text-danger'>Не удалось загрузить файл</h4>"]);
+            }
+
+
+            return new View('site.add_diagnosis');
+        }
+        return new View('site.add_diagnosis');
     }
 }

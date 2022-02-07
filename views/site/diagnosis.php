@@ -1,6 +1,7 @@
 <h1 class="text-center">Список диагнозов</h1>
 <div class="container">
     <section class="w-100 p-4 pb-4 d-flex justify-content-center align-items-center flex-column">
+
         <div>
             <form action="" method="get" class="d-flex">
 
@@ -11,20 +12,23 @@
     </section>
 </div>
 <div class="container mt-4">
-    <table class="table">
+    <button class="btn btn-primary mb-4" onclick="window.location.href='<?=app()->route->getUrl('/diagnosis/create')?>'">Создать</button>
+    <table class="table  table-hover">
         <thead>
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col">№</th>
             <th scope="col">Диагноз</th>
             <th scope="col">Описание</th>
+            <th scope="col">Иллюстрация</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody >
         <?php
+        $num=1;
         if(isset($diagnosis[0])){
             foreach ($diagnosis as $diagnose) {
-                echo '<tr><th scope="row">' . $diagnose->id . '</th> <td>' . $diagnose->title . '</td> <td>' . $diagnose->description . '</td>        </tr>';
-
+                echo "<tr><th scope='row'>$num</th> <td>$diagnose->title</td> <td>$diagnose->description</td> <td><img width='200px' height='200px' src='/practice/$diagnose->image'></td> </tr>";
+                $num++;
             }
         }
         else{
