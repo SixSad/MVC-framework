@@ -98,9 +98,26 @@ class Site
         return new View('site.profile');
     }
 
-    public function patientAppointments(): string{
-        $appointments = Appointments::all();
-        return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
+    public function patientAppointments(Request $request): string{
+        $user =  app()->auth::user()->id;
+        if($request ->method === 'GET') {
+            $appointments = Appointments::where('patient_id',$user)->get();
+            if (!empty($_GET['search_patient'])) {
+                $q = $request->get('search_patient');
+                $user = User::where(['firstname'=>$q],['lastname'=>$q])->first();
+                if(!empty($user)){
+                    $appointments = Appointments::where('patient_id',$user['id'])->get();
+                }
+                else{
+                    $appointments = [];
+                }
+            }
+            if (!empty($_GET['search_date'])) {
+                $q = $request->get('search_date');
+                $appointments = Appointments::where('date',$q)->get();
+            }
+            return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
+        }
     }
 
     public function doctorAppointments(Request $request): string{
@@ -108,7 +125,7 @@ class Site
             $appointments = Appointments::all();
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where('firstname',$q)->first();
+                $user = User::where(['firstname'=>$q],['lastname'=>$q])->first();
                 if(!empty($user)){
                     $appointments = Appointments::where('patient_id',$user['id'])->get();
                 }
@@ -198,5 +215,39 @@ class Site
             }
         }
         return new View('site.create_user');
+    }
+
+    public function update_diagnosis(Request $request): string
+    {
+        $id = $request->get('id');
+        $diagnosis = Diagnoses::all();
+        $form = Appointments::where('id',$id)->first();
+        $patient = User::where('id',$form['patient_id'])->first();
+        if($request->method ==='GET'){
+            return new View('site.update_diagnosis',['form'=>$form,'patient'=>$patient,'diagnosis'=>$diagnosis]);
+        }
+
+        if ($request->method === 'POST') {
+
+            $validator = new Validator($request->all(), [
+                'diagnosis' => ['required']
+            ], [
+                'required' => 'Поле: field пусто',
+            ]);
+
+            if ($validator->fails()) {
+                return new View('site.update_diagnosis',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'form'=>$form,'patient'=>$patient,'diagnosis'=>$diagnosis]);
+            }
+            $form = Appointments::where('id',$id)->first();
+            $form->diagnosis=$request->get('diagnosis');
+            $form->save();
+            app()->route->redirect('/appointmentsd');
+
+//            $form = Appointments::where('id',$request->get('id'))->first();
+//            $form->dia ='dfdf';
+//            $form->save();
+        }
+
     }
 }

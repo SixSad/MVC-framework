@@ -1,4 +1,3 @@
-
 <div class="container-fluid ">
     <div class=" col-md-4 offset-md-4 shadow bg-white  my-4" style="padding: 50px 100px;border-radius: 40px;">
         <div class="form-container d-flex flex-column ">
@@ -12,15 +11,18 @@
                 </div>
                 <div class="col-12">
                     <label class="form-label ms-2">Пароль</label>
-                    <input type="password" class="form-control rounded-pill ps-3 py-2" name="password" placeholder="password">
+                    <input type="password" class="form-control rounded-pill ps-3 py-2" name="password"
+                           placeholder="password">
                 </div>
                 <div class="col-12">
                     <label class="form-label ms-2">Имя</label>
-                    <input type="text" class="form-control rounded-pill ps-3 py-2" name="firstname" placeholder="firstname">
+                    <input type="text" class="form-control rounded-pill ps-3 py-2" name="firstname"
+                           placeholder="firstname">
                 </div>
                 <div class="col-12">
                     <label class="form-label ms-2">Фамилия</label>
-                    <input type="text" class="form-control rounded-pill ps-3 py-2"  name="lastname" placeholder="lastname">
+                    <input type="text" class="form-control rounded-pill ps-3 py-2" name="lastname"
+                           placeholder="lastname">
                 </div>
                 <div class="col-12">
                     <label class="form-label ms-2">Роль</label>
@@ -35,7 +37,8 @@
                     <input type="date" class=" form-control  rounded-pill ps-3 py-2" name="birth_date">
                 </div>
                 <div class="col-12 offset-md-3" style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary rounded-pill fs-5" style="padding: 10px 80px">Sign in</button>
+                    <button type="submit" class="btn btn-primary rounded-pill fs-5" style="padding: 10px 80px">Sign in
+                    </button>
                 </div>
             </form>
         </div>

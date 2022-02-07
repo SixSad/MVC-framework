@@ -34,28 +34,32 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
                     <?php
-                    if (app()->auth::role() == 3):
+                    if (app()->auth::role()):
+                        $role = app()->auth::role();
+                        if ($role ==3):
+                            ?>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
+                                    на прием</a></li>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
+                                    прием</a></li>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/create_user') ?>">Создать
+                                    пользователя</a></li>
+                        <?php
+                        elseif ($role == 2):
+                            ?>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
+                                    прием</a></li>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
+                        <?php
+                        elseif ($role == 1):
+                            ?>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
+                                    на прием</a></li>
+                            <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsp') ?>">Ваши записи</a></li>
+                        <?php
+                        endif;
                         ?>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
-                                на прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
-                                прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/create_user') ?>">Создать
-                                пользователя</a></li>
-                    <?php
-                    elseif (app()->auth::role() == 2):
-                        ?>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsd') ?>">Записи на
-                                прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/diagnosis') ?>">Дигнозы</a></li>
-                    <?php
-                    elseif (app()->auth::role() == 1):
-                        ?>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointments/create') ?>">Записаться
-                                на прием</a></li>
-                        <li><a class="dropdown-item" href="<?= app()->route->getUrl('/appointmentsp') ?>">Ваши записи</a></li>
-
                     <?php
                     else:
                         ?>
@@ -64,7 +68,7 @@
                         <li><a class="dropdown-item" href="#">Контакты</a></li>
                     <?php
                     endif;
-                    ?>
+                ?>
 
                 </ul>
             </div>
