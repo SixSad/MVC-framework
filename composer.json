@@ -9,7 +9,8 @@
         "illuminate/database": "8.x-dev",
         "illuminate/events": "8.x-dev",
         "nikic/fast-route": "2.0.x-dev",
-        "twbs/bootstrap": "dev-main"
+        "twbs/bootstrap": "dev-main",
+        "sixsad/collect": "dev-master"
 
     },
     "autoload": {
