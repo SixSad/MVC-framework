@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 
+
 use Model\User;
 use Model\Diagnoses;
 use Src\View;
@@ -9,7 +10,7 @@ use Src\Validator\Validator;
 
 class Admin
 {
-    public function create_user(Request $request): string
+    public function createUser(Request $request): string
     {
         if ($request->method === 'POST') {
             $validator = new Validator($request->all(), [
@@ -38,7 +39,7 @@ class Admin
         return new View('site.create_user');
     }
 
-    public function create_diagnosis(Request $request): string
+    public function createDiagnosis(Request $request): string
     {
         if ($request->method === 'POST') {
             $validator = new Validator($request->all(), [

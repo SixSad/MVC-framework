@@ -5,39 +5,27 @@ use Model\Appointments;
 use Model\User;
 use Src\View;
 use Src\Request;
-use Src\Auth\Auth;
 use Src\Validator\Validator;
 
 class Patient
 {
-    public function logout(): void
-    {
-        Auth::logout();
-        app()->route->redirect('/');
-    }
-
-    public function profile(): string
-    {
-        return new View('site.profile');
-    }
-
     public function patientAppointments(Request $request): string
     {
-        $user = app()->auth::user()->id;
         if ($request->method === 'GET') {
-            $appointments = Appointments::where('patient_id', $user)->get();
+            $appointments = Appointments::all()->sortBy('date');
+
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where(['firstname' => $q], ['lastname' => $q])->first();
+                $user = User::where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%")->first();
                 if (!empty($user)) {
-                    $appointments = Appointments::where('patient_id', $user['id'])->get();
+                    $appointments = Appointments::where('patient_id', $user['id'])->get()->sortBy('-date');
                 } else {
                     $appointments = [];
                 }
             }
             if (!empty($_GET['search_date'])) {
                 $q = $request->get('search_date');
-                $appointments = Appointments::where('date', $q)->get();
+                $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
             }
             return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
         }

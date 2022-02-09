@@ -12,7 +12,20 @@
     </section>
 </div>
 <div class="container mt-4">
-    <button class="btn btn-primary mb-4" onclick="window.location.href='<?=app()->route->getUrl('/diagnosis/create')?>'">Создать</button>
+    <?php
+    use Src\Auth\Auth;
+    $role = Auth::role() ;
+    if(!empty($role)):
+    if ($role ==3):
+        ?>
+        <button class="btn btn-primary mb-4" onclick="window.location.href='<?=app()->route->getUrl('/diagnosis/create')?>'">Создать</button>
+    <?php
+    endif;
+    ?>
+    <?php
+    endif;
+    ?>
+
     <table class="table  table-hover">
         <thead>
         <tr>

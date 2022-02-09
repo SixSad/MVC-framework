@@ -13,7 +13,7 @@ class Doctor
     public function doctorAppointments(Request $request): string
     {
         if ($request->method === 'GET') {
-            $appointments = Appointments::all()->sortBy('-date');
+            $appointments = Appointments::all()->sortBy('-patient_id');
 
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
@@ -46,7 +46,7 @@ class Doctor
         }
     }
 
-    public function update_diagnosis(Request $request): string
+    public function updateDiagnosis(Request $request): string
     {
         $id = $request->get('id');
         $diagnosis = Diagnoses::all();

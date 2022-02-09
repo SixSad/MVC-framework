@@ -5,6 +5,7 @@ use Model\User;
 use Src\View;
 use Src\Request;
 use Src\Validator\Validator;
+use Src\Auth\Auth;
 
 class Guest
 {
@@ -54,7 +55,7 @@ class Guest
             return new View('site.login');
         }
         //Если удалось аутентифицировать пользователя, то редирект
-        if (Patient::attempt($request->all())) {
+        if (Auth::attempt($request->all())) {
             app()->route->redirect('/');
         }
         //Если аутентификация не удалась, то сообщение об ошибке
