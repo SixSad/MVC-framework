@@ -7,6 +7,7 @@ use FastRoute\RouteParser\Std;
 use FastRoute\DataGenerator\MarkBased;
 use FastRoute\Dispatcher\MarkBased as Dispatcher;
 use Src\Traits\SingletonTrait;
+use function Collect\collection;
 
 class Middleware
 {
@@ -55,13 +56,11 @@ class Middleware
     {
         $routeMiddleware = app()->settings->app['routeAppMiddleware'];
 
-        foreach ($routeMiddleware as $name => $class) {
-            $args = explode(':', $name);
-            $request = (new $class)->handle($request, $args[1]?? null) ?? $request;
-        }
+        collection($routeMiddleware)->each(function ($value, $key, $request) {
+            $args = explode(':', $key);
+            $request = (new $value)->handle($request, $args[1] ?? null) ?? $request;
+        }, $request);
         return $request;
     }
-
-
 }
 

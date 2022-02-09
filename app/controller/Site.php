@@ -247,9 +247,6 @@ class Site
             $form->save();
             app()->route->redirect('/appointmentsd');
 
-//            $form = Appointments::where('id',$request->get('id'))->first();
-//            $form->dia ='dfdf';
-//            $form->save();
         }
 
     }
@@ -268,16 +265,13 @@ class Site
                 return new View('site.add_diagnosis',
                     ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
             }
-
+            $image = new User;
             if ($_FILES['file']['error'] == 0) {
-                $image = $_FILES['file']['name'];
-                $tmp_file = $_FILES['file']['tmp_name'];
-                $up_folder = "../" . app()->settings->getFilePath() . "/$image";
-                if (move_uploaded_file($tmp_file, $up_folder)) {
+                if ($image->saveFromTemp('file',app()->settings->getFilePath())) {
                     $diagnosis = new Diagnoses();
                     $diagnosis->title = $request->get('title');
                     $diagnosis->description = $request->get('description');
-                    $diagnosis->image = app()->settings->getFilePath() . "/$image";
+                    $diagnosis->image = $image->getTemplate('file',app()->settings->getFilePath());
                     $diagnosis->save();
                     return new View('site.add_diagnosis',
                         ['message' => 'Диагноз добавлен']);
