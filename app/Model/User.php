@@ -4,6 +4,8 @@ namespace Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Src\Auth\IdentityInterface;
 
 class User extends Model implements IdentityInterface
@@ -42,5 +44,12 @@ class User extends Model implements IdentityInterface
     {
         return self::where(['username' => $credentials['username'],
             'password' => md5($credentials['password'])])->first();
+    }
+
+
+    public function logout()
+    {
+        $this->api_token = null;
+        $this->save();
     }
 }
