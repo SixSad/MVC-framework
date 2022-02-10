@@ -1,4 +1,5 @@
 <?php
+
 namespace Controller;
 
 use Model\Appointments;
@@ -16,27 +17,25 @@ class Patient
 
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%")->first();
-                if (!empty($user)) {
-                    $appointments = Appointments::where('patient_id', $user['id'])->get()->sortBy('-date');
+                if (!empty($q)) {
+                    $appointments = Appointments::whereIn('doctor_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
                 } else {
                     $appointments = [];
                 }
             }
+
             if (!empty($_GET['search_date'])) {
                 $q = $request->get('search_date');
                 $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
             }
-            return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
         }
+        return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
+
     }
 
     public function appointmentsCreate(Request $request): string
     {
         $doctors = User::where('role_id', '2')->get();
-        if ($request->method === 'GET') {
-            return (new View())->render('site.new_appointment', ['doctors' => $doctors]);
-        }
 
         if ($request->method === 'POST') {
             $validator = new Validator($request->all(), [
@@ -58,5 +57,11 @@ class Patient
                     ['message' => "<p class='text-success'>Вы записались на прием</p>", 'doctors' => $doctors]);
             }
         }
+
+        if ($request->method === 'GET') {
+            return (new View())->render('site.new_appointment', ['doctors' => $doctors]);
+        }
+
+//        return app()->route->redirect('/error403');
     }
 }

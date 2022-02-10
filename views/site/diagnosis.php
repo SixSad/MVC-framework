@@ -40,7 +40,7 @@
         $num=1;
         if(isset($diagnosis[0])){
             foreach ($diagnosis as $diagnose) {
-                echo "<tr><th scope='row'>$num</th> <td>$diagnose->title</td> <td>$diagnose->description</td> <td><img width='200px' height='200px' src='/practice/$diagnose->image'></td> </tr>";
+                echo "<tr><th scope='row'>$num</th> <td>$diagnose->title</td> <td>$diagnose->description</td> <td><img width='200px' height='200px' src='".app()->settings->getRootPath()."$diagnose->image'></td> </tr>";
                 $num++;
             }
         }

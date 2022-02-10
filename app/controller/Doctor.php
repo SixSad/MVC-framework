@@ -1,4 +1,5 @@
 <?php
+
 namespace Controller;
 
 use Model\Appointments;
@@ -7,29 +8,29 @@ use Model\Diagnoses;
 use Src\View;
 use Src\Request;
 use Src\Validator\Validator;
+use function Collect\collection;
 
 class Doctor
 {
     public function doctorAppointments(Request $request): string
     {
         if ($request->method === 'GET') {
-            $appointments = Appointments::all()->sortBy('-patient_id');
+            $appointments = Appointments::all()->sortBy('date');
 
             if (!empty($_GET['search_patient'])) {
                 $q = $request->get('search_patient');
-                $user = User::where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%")->first();
-                if (!empty($user)) {
-                    $appointments = Appointments::where('patient_id', $user['id'])->get()->sortBy('-date');
+                if (!empty($q)) {
+                    $appointments = Appointments::whereIn('patient_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
                 } else {
                     $appointments = [];
                 }
             }
             if (!empty($_GET['search_date'])) {
                 $q = $request->get('search_date');
-                $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
+                $appointments = Appointments::where('date', $q)->get()->sortBy('date');
             }
-            return (new View())->render('site.doctorAppointments', ['appointments' => $appointments]);
         }
+        return (new View())->render('site.doctorAppointments', ['appointments' => $appointments]);
     }
 
     public function diagnosis(Request $request): string
