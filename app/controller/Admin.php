@@ -44,10 +44,11 @@ class Admin
     {
         if ($request->method === 'POST') {
             $validator = new Validator($request->all(), [
-                'title' => ['required'],
+                'title' => ['required','latina'],
                 'description' => ['required'],
             ], [
                 'required' => 'Поле: field пусто',
+                'latina' => 'Поле: field принимает (a-z;0-9)',
             ]);
 
             if ($validator->fails()) {
@@ -63,6 +64,7 @@ class Admin
                 $diagnosis->save();
 
                 return app()->route->redirect('/diagnosis');
+                return false;
             }
             return new View('site.add_diagnosis',
                 ['message' => "<h4 class='text-danger'>Не удалось загрузить файл</h4>"]);

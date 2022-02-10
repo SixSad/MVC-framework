@@ -51,12 +51,27 @@ class Guest
 
     public function login(Request $request): string
     {
-        if ($request->method === 'GET') {
-            return new View('site.login');
+        if ($request->method === 'POST') {
+            $validator = new Validator($request->all(), [
+                'username' => ['required'],
+                'password' => ['required']
+            ], [
+                'required' => 'Поле: field пусто',
+            ]);
+
+            if ($validator->fails()) {
+                return new View('site.login',
+                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
+            }
+
+            if (Auth::attempt($request->all())) {
+                app()->route->redirect('/');
+                return false;
+            }
+            return new View('site.login', ['message' => 'Неправильные логин или пароль']);
         }
-        if (Auth::attempt($request->all())) {
-            app()->route->redirect('/');
-        }
-        return new View('site.login', ['message' => 'Неправильные логин или пароль']);
+
+        return new View('site.login');
     }
+
 }

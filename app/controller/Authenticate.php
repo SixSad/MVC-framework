@@ -6,10 +6,10 @@ use Src\View;
 
 class Authenticate
 {
-    public function logout(): void
+    public function logout(): string
     {
         Auth::logout();
-        app()->route->redirect('/');
+        return app()->route->redirect('/');
     }
 
     public function profile(): string
