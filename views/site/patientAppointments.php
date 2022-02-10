@@ -24,20 +24,23 @@
 
             use Model\User;
             use Model\Diagnosis;
-            $number=1;
-            foreach ($appointments as $appointment) {
 
-                $user = User::where('id', $appointment->doctor_id)->first();
-                if (!empty($appointment->diagnosis)) {
-                    $diagnosis = Diagnosis::where('id', $appointment->diagnosis)->first()['title'];
-                    echo "<tr><th scope='row''>$number</th> <td>$user->firstname $user->lastname</td> <td>$appointment->date</td>  <td>$diagnosis</td> </tr>";
-                    $number++;
-                } else {
-                    echo "<tr><th scope='row''>$number</th> <td>$user->firstname $user->lastname</td> <td>$appointment->date</td>  <td>   </td> </tr>";
-                    $number++;
+            if (!empty($appointments) && isset($appointments[0])) {
+                $number = 1;
+                foreach ($appointments as $appointment) {
+
+                    $user = User::where('id', $appointment->doctor_id)->first();
+                    if (!empty($appointment->diagnosis)) {
+                        $diagnosis = Diagnosis::where('id', $appointment->diagnosis)->first()['title'];
+                        echo "<tr><th scope='row''>$number</th> <td>$user->firstname $user->lastname</td> <td>$appointment->date</td>  <td>$diagnosis</td> </tr>";
+                        $number++;
+                    } else {
+                        echo "<tr><th scope='row''>$number</th> <td>$user->firstname $user->lastname</td> <td>$appointment->date</td>  <td>   </td> </tr>";
+                        $number++;
+                    }
                 }
-
-
+            } else {
+                echo "<h2 class='text-center text-secondary mb-5'>Таких записей не существует</h2>";
             }
             ?>
 

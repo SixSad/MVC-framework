@@ -12,7 +12,8 @@
         "twbs/bootstrap": "dev-main",
         "sixsad/collect": "dev-master",
         "sixsad/session": "dev-master",
-        "mrrouone/files": "dev-master"
+        "mrrouone/files": "dev-master",
+        "phpunit/phpunit": "10.0.x-dev"
 
     },
     "autoload": {

@@ -54,20 +54,18 @@ class Admin
                 return new View('site.add_diagnosis',
                     ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
             }
-            if ($_FILES['file']['error'] == 0) {
-                if (fileWork()->checkUpload('file', app()->settings->getFilePath() . "/", 'out')) {
-                    $diagnosis = new Diagnoses();
-                    $diagnosis->title = $request->get('title');
-                    $diagnosis->description = $request->get('description');
-                    $diagnosis->image = fileWork()->rootToUpload('file', app()->settings->getFilePath() . "/", 'this');
-                    $diagnosis->save();
 
-                    return app()->route->redirect('/diagnosis');
-                }
+            if (fileWork()->checkUpload('file', app()->settings->getFilePath() . "/", 'out')) {
+                $diagnosis = new Diagnoses();
+                $diagnosis->title = $request->get('title');
+                $diagnosis->description = $request->get('description');
+                $diagnosis->image = fileWork()->rootToUpload('file', app()->settings->getFilePath() . "/", 'this');
+                $diagnosis->save();
+
+                return app()->route->redirect('/diagnosis');
             }
             return new View('site.add_diagnosis',
                 ['message' => "<h4 class='text-danger'>Не удалось загрузить файл</h4>"]);
-
         }
         return new View('site.add_diagnosis');
     }

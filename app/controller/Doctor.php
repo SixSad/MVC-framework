@@ -14,38 +14,43 @@ class Doctor
 {
     public function doctorAppointments(Request $request): string
     {
-        if ($request->method === 'GET') {
-            $appointments = Appointments::all()->sortBy('date');
+        $appointments = Appointments::all()->sortBy('date');
 
-            if (!empty($_GET['search_patient'])) {
-                $q = $request->get('search_patient');
-                if (!empty($q)) {
-                    $appointments = Appointments::whereIn('patient_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
-                } else {
-                    $appointments = [];
-                }
-            }
-            if (!empty($_GET['search_date'])) {
-                $q = $request->get('search_date');
-                $appointments = Appointments::where('date', $q)->get()->sortBy('date');
+        if ($request->method === 'POST') {
+            return app()->route->redirect('/error403');
+        }
+
+        if (!empty($_GET['search_patient'])) {
+            $q = $request->get('search_patient');
+            if (!empty($q)) {
+                $appointments = Appointments::whereIn('patient_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
+            } else {
+                $appointments = [];
             }
         }
+        if (!empty($_GET['search_date'])) {
+            $q = $request->get('search_date');
+            $appointments = Appointments::where('date', $q)->get()->sortBy('date');
+        }
+
         return (new View())->render('site.doctorAppointments', ['appointments' => $appointments]);
     }
 
     public function diagnosis(Request $request): string
     {
-
-        if ($request->method === 'GET') {
-            if (!empty($_GET['search'])) {
-                $q = $request->get('search');
-                $diagnosis = Diagnoses::where('title', 'like', "%$q%")->get()->sortBy('title');
-                return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
-            } else {
-                $diagnosis = Diagnoses::all()->sortBy('title');
-                return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
-            }
+        if ($request->method === 'POST') {
+            return app()->route->redirect('/error403');
         }
+
+        if (!empty($_GET['search'])) {
+            $q = $request->get('search');
+            $diagnosis = Diagnoses::where('title', 'like', "%$q%")->get()->sortBy('title');
+            return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
+        }
+
+        $diagnosis = Diagnoses::all()->sortBy('title');
+        return (new View())->render('site.diagnosis', ['diagnosis' => $diagnosis]);
+
     }
 
     public function updateDiagnosis(Request $request): string
@@ -54,9 +59,6 @@ class Doctor
         $diagnosis = Diagnoses::all();
         $form = Appointments::where('id', $id)->first();
         $patient = User::where('id', $form['patient_id'])->first();
-        if ($request->method === 'GET') {
-            return new View('site.update_diagnosis', ['form' => $form, 'patient' => $patient, 'diagnosis' => $diagnosis]);
-        }
 
         if ($request->method === 'POST') {
 
@@ -70,13 +72,14 @@ class Doctor
                 return new View('site.update_diagnosis',
                     ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'form' => $form, 'patient' => $patient, 'diagnosis' => $diagnosis]);
             }
+
             $form = Appointments::where('id', $id)->first();
             $form->diagnosis = $request->get('diagnosis');
             $form->save();
             app()->route->redirect('/appointmentsd');
 
         }
-
+        return new View('site.update_diagnosis', ['form' => $form, 'patient' => $patient, 'diagnosis' => $diagnosis]);
     }
 
 }

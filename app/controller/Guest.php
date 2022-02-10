@@ -43,7 +43,7 @@ class Guest
             }
 
             if (User::create($request->all())) {
-                app()->route->redirect('/login');
+                return app()->route->redirect('/login');
             }
         }
         return new View('site.signup');

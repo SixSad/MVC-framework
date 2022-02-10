@@ -12,25 +12,27 @@ class Patient
 {
     public function patientAppointments(Request $request): string
     {
-        if ($request->method === 'GET') {
-            $appointments = Appointments::all()->sortBy('date');
+        $appointments = Appointments::all()->sortBy('date');
 
-            if (!empty($_GET['search_patient'])) {
-                $q = $request->get('search_patient');
-                if (!empty($q)) {
-                    $appointments = Appointments::whereIn('doctor_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
-                } else {
-                    $appointments = [];
-                }
-            }
-
-            if (!empty($_GET['search_date'])) {
-                $q = $request->get('search_date');
-                $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
+        if (!empty($_GET['search_patient'])) {
+            $q = $request->get('search_patient');
+            if (!empty($q)) {
+                $appointments = Appointments::whereIn('doctor_id', User::select('id')->where('firstname', 'like', "%$q%")->orWhere('lastname', 'like', "%$q%"))->get()->sortBy('date');
+            } else {
+                $appointments = [];
             }
         }
-        return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
 
+        if (!empty($_GET['search_date'])) {
+            $q = $request->get('search_date');
+            $appointments = Appointments::where('date', $q)->get()->sortBy('-date');
+        }
+
+        if ($request->method === 'POST') {
+            return app()->route->redirect('/error403');
+        }
+
+        return (new View())->render('site.patientAppointments', ['appointments' => $appointments]);
     }
 
     public function appointmentsCreate(Request $request): string
@@ -49,19 +51,15 @@ class Patient
 
             if ($validator->fails()) {
                 return new View('site.new_appointment',
-                    ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE), 'doctors' => $doctors]);
+                    ['message' => '<h5 class="text-danger">'.json_encode($validator->errors(), JSON_UNESCAPED_UNICODE).'</h5>', 'doctors' => $doctors]);
             }
 
             if (Appointments::create($request->all())) {
                 return new View('site.new_appointment',
-                    ['message' => "<p class='text-success'>Вы записались на прием</p>", 'doctors' => $doctors]);
+                    ['message' => "<h5 class='text-success'>Вы записались на прием</h5>", 'doctors' => $doctors]);
             }
         }
 
-        if ($request->method === 'GET') {
-            return (new View())->render('site.new_appointment', ['doctors' => $doctors]);
-        }
-
-//        return app()->route->redirect('/error403');
+        return (new View())->render('site.new_appointment', ['doctors' => $doctors]);
     }
 }

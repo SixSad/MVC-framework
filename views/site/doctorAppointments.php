@@ -36,7 +36,7 @@
                 }
             }
         } else {
-            echo "<h2 class='text-center text-secondary'>Таких записей не существует</h2>";
+            echo "<h2 class='text-center text-secondary mb-5'>Таких записей не существует</h2>";
         }
         ?>
 
