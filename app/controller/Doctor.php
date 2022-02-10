@@ -35,6 +35,7 @@ class Doctor
 
     public function diagnosis(Request $request): string
     {
+
         if ($request->method === 'GET') {
             if (!empty($_GET['search'])) {
                 $q = $request->get('search');

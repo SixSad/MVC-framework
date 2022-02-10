@@ -10,7 +10,9 @@
         "illuminate/events": "8.x-dev",
         "nikic/fast-route": "2.0.x-dev",
         "twbs/bootstrap": "dev-main",
-        "sixsad/collect": "dev-master"
+        "sixsad/collect": "dev-master",
+        "sixsad/session": "dev-master",
+        "mrrouone/files": "dev-master"
 
     },
     "autoload": {

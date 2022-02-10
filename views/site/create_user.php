@@ -37,7 +37,7 @@
                     <input type="date" class=" form-control  rounded-pill ps-3 py-2" name="birth_date">
                 </div>
                 <div class="col-12 offset-md-3" style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary rounded-pill fs-5" style="padding: 10px 80px">Sign in
+                    <button type="submit" class="btn btn-primary rounded-pill fs-5" style="padding: 10px 80px">Создать
                     </button>
                 </div>
             </form>

@@ -4,7 +4,7 @@
             <form class="d-flex row g-3 justify-content-center" method="post" enctype="multipart/form-data">
                 <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>">
                 <h1 class="text-center">Добавление диагноза</h1>
-                <b class="text-center"><?= $message ?? ''; ?></b>
+                <b class="text-center text-danger"><?= $message ?? ''; ?></b>
                 <div class="col-12">
                     <label class="form-label ms-2">Название</label>
                     <input type="text" name="title" class=" form-control  rounded-pill ps-3 py-2">
@@ -18,7 +18,7 @@
 
                 <div class="col-lg-12 d-flex justify-content-center" style="margin-top: 30px; a">
                     <button type="submit" class="btn btn-primary rounded-pill fs-5" style="padding: 10px 80px">
-                        Записаться
+                        Создать
                     </button>
                 </div>
             </form>

@@ -1,7 +1,8 @@
 <?php
+
 namespace Controller;
 
-
+use function FileWork\fileWork;
 use Model\User;
 use Model\Diagnoses;
 use Src\View;
@@ -53,24 +54,20 @@ class Admin
                 return new View('site.add_diagnosis',
                     ['message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
             }
-            $image = new User;
             if ($_FILES['file']['error'] == 0) {
-                if ($image->saveFromTemp('file',app()->settings->getFilePath())) {
+                if (fileWork()->checkUpload('file', app()->settings->getFilePath() . "/", 'out')) {
                     $diagnosis = new Diagnoses();
                     $diagnosis->title = $request->get('title');
                     $diagnosis->description = $request->get('description');
-                    $diagnosis->image = $image->getTemplate('file',app()->settings->getFilePath());
+                    $diagnosis->image = fileWork()->rootToUpload('file', app()->settings->getFilePath() . "/", 'this');
                     $diagnosis->save();
-                    return new View('site.add_diagnosis',
-                        ['message' => 'Диагноз добавлен']);
+
+                    return app()->route->redirect('/diagnosis');
                 }
-            } else {
-                return new View('site.add_diagnosis',
-                    ['message' => "<h4 class='text-danger'>Не удалось загрузить файл</h4>"]);
             }
+            return new View('site.add_diagnosis',
+                ['message' => "<h4 class='text-danger'>Не удалось загрузить файл</h4>"]);
 
-
-            return new View('site.add_diagnosis');
         }
         return new View('site.add_diagnosis');
     }

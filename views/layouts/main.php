@@ -17,7 +17,7 @@
     <title>Pop it MVC</title>
 </head>
 <body>
-<div class="container-fluid p-0 mw-100">
+<div class="container-fluid p-0 min-vh-100 ">
     <header class=" d-flex  flex-column flex-md-row align-items-center justify-content-center justify-content-md-between py-3 shadow bg-white rounded "
             style="padding: 0px 100px;">
 
@@ -115,7 +115,7 @@
 
 
 </div>
-<footer class=" fixed-bottom bg-dark ">
+<footer class="bg-dark">
     <div class="" style="max-height:200px;min-height: 50px">
     </div>
 </footer>

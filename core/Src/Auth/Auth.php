@@ -2,7 +2,8 @@
 
 namespace Src\Auth;
 
-use Src\Session;
+use function Session\session;
+
 
 class Auth
 {
@@ -19,7 +20,7 @@ class Auth
     public static function login(IdentityInterface $user): void
     {
         self::$user = $user;
-        Session::set('id', self::$user->getId());
+        session()->set('id', self::$user->getId());
     }
 
     public static function attempt(array $credentials): bool
@@ -31,13 +32,15 @@ class Auth
         return false;
     }
 
-    public static function role(){
-        return self::user()['role_id']??'';
+    public static function role()
+    {
+        return self::user()['role_id'] ?? '';
     }
 
     public static function user()
     {
-        $id = Session::get('id') ?? 0;
+
+        $id = session()->get('id')??0;
         return self::$user->findIdentity($id);
     }
 
@@ -51,14 +54,14 @@ class Auth
 
     public static function logout(): bool
     {
-        Session::clear('id');
+        session()->clear('id');
         return true;
     }
 
     public static function generateCSRF(): string
     {
         $token = md5(time());
-        Session::set('csrf_token', $token);
+        session()->set('csrf_token',$token);
         return $token;
     }
 

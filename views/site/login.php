@@ -4,7 +4,7 @@
 if (!app()->auth::check()):
     ?>
     <div class="container-fluid ">
-        <div class=" col-md-4 offset-md-4 shadow bg-white my-4" style="padding: 50px 100px; border-radius: 40px">
+        <div class=" col-md-4 offset-md-4 shadow bg-white mt-4" style="padding: 50px 100px; border-radius: 40px">
             <div class="form-container d-flex flex-column ">
                 <form class="d-flex row g-3" method="post">
                     <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>

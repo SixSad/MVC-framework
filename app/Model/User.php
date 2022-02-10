@@ -5,9 +5,8 @@ namespace Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Src\Auth\IdentityInterface;
-use Src\Files\FileUploadInterface;
 
-class User extends Model implements IdentityInterface, FileUploadInterface
+class User extends Model implements IdentityInterface
 {
     use HasFactory;
 
@@ -44,25 +43,4 @@ class User extends Model implements IdentityInterface, FileUploadInterface
         return self::where(['username' => $credentials['username'],
             'password' => md5($credentials['password'])])->first();
     }
-
-    public function getUploadFile($file): string
-    {
-        return $_FILES["$file"]['name'];
-    }
-
-    public function getUploadTempFile($file): string{
-        return $_FILES["$file"]['tmp_name'];
-    }
-
-    public function getUploadPath($file,$path): string {
-        return "..".$path . "/".$this->getUploadFile($file);
-}
-    public function getTemplate($file,$path): string {
-        return $path."/".$this->getUploadFile($file);
-    }
-
-    public function saveFromTemp($file,$path){
-        return move_uploaded_file($this->getUploadTempFile($file), $this->getUploadPath($file,$path));
-}
-
 }
