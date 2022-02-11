@@ -5,7 +5,7 @@ use Model\User;
 use PHPUnit\Framework\TestCase;
 use Src\Auth\Auth;
 
-class SiteTest extends TestCase
+class GuestTest extends TestCase
 {
 
     /**

@@ -35,6 +35,11 @@ class User extends Model implements IdentityInterface
         return self::where('id', $id)->first();
     }
 
+    public function findIdentityApi($token)
+    {
+        return self::where('api_token', $token)->first();
+    }
+
     public function getId(): int
     {
         return $this->id;

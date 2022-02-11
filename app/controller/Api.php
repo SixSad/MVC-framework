@@ -16,33 +16,24 @@ class Api
     public function index(): void
     {
         $posts = User::all()->toArray();
-
         (new View())->toJSON($posts);
     }
 
     public function login(Request $request): void
     {
-        if ($request->method === 'POST') {
-
-            if (Auth::attempt($request->all())) {
-                $api_token = Str::random(20);
-                User::where('username', $request->get('username'))->update(['api_token' => $api_token]);
-            }
+        if (Auth::attemptApi($request->all())) {
+            $api_token = User::where('username', $request->username)->first()['api_token'];
             (new View())->toJSON([$request->all(), 'your api_token' => $api_token]);
         }
+        (new View())->toJSON([$request->all(), 'error' => 'invalid password or login']);
     }
 
     public function logout(Request $request): void
     {
-        $headers = getallheaders();
-        if (isset($headers['Authorization'])) {
-            $api_token = explode(' ', $headers['Authorization'])[1];
+        if (Auth::logoutApi()) {
+            (new View())->toJSON(['message' => 'Успешный выход']);
         }
-        if (!empty($api_token)){
-            User::where('api_token', $api_token)->update(['api_token' => NULL]);
-            (new View())->toJSON(['message' => 'Выход']);
-        }
-        (new View())->toJSON(['message' => 'Не авторизован']);
+        (new View())->toJSON(['message' => 'Не аутентифицирован']);
     }
 
     public function diagnosis(Request $request): void

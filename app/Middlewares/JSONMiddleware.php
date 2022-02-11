@@ -11,7 +11,6 @@ class JSONMiddleware
 {
     public function handle(Request $request): Request
     {
-        file_put_contents(__DIR__.'\\txt.txt','asdasdasd');
         if ($request->method === 'GET') {
             return $request;
         }

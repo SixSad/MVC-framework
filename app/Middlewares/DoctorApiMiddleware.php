@@ -13,7 +13,7 @@ class DoctorApiMiddleware
 
     public function handle(Request $request)
     {
-        if (Role::where('id', Auth::role())->first()['role_code'] !== 'doctor') {
+        if (Role::where('id', Auth::roleApi())->first()['role_code'] !== 'doctor') {
             return (new View())->toJSON(['error'=>'forbidden for you']);
         }
     }
