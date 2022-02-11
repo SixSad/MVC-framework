@@ -47,9 +47,4 @@ class User extends Model implements IdentityInterface
     }
 
 
-    public function logout()
-    {
-        $this->api_token = null;
-        $this->save();
-    }
 }

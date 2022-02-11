@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Providers;
 
 use Src\Provider\AbstractProvider;
@@ -22,9 +23,8 @@ class RouteProvider extends AbstractProvider
             $this->app->settings->removeAppMiddleware('specialChars');
 
             //Загружаем маршруты из файла для апи
-            Route::group('/api', function () {
-                require_once __DIR__ . '/../..' . $this->app->settings->getRoutePath() . '/api.php';
-            });
+            require_once __DIR__ . '/../..' . $this->app->settings->getRoutePath() . '/api.php';
+
             return;
         }
 

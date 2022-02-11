@@ -60,5 +60,4 @@ class Settings
         unset($this->_settings['app']['routeAppMiddleware'][$key]);
     }
 
-
 }

@@ -162,7 +162,7 @@ class SiteTest extends TestCase
                 '<h3>{"title":["Поле username пусто"],"description":["Поле password пусто"]}</h3>',
             ],
             ['POST', ['title' => 'фыв', 'description' => 'blank','file'=>''],
-                '<h3>{"title":["Поле: field принимает (a-z;0-9)"]</h3>',
+                '<h3>{"title":["Поле: field принимает (a-z;0-9)"]}</h3>',
             ],
             ['POST', ['title' => 'blank', 'description' => 'blank','file'=>'blank'],
                 'Location: /practice/diagnosis/'

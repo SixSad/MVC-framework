@@ -38,6 +38,12 @@ class Auth
         return self::user()['role_id'] ?? '';
     }
 
+    public static function token()
+    {
+        return self::user()['api_token'] ?? '';
+    }
+
+
     public static function generateBearer(): string
     {
         $provider = new OAuthProvider();
@@ -61,7 +67,6 @@ class Auth
 
     public static function logout(): bool
     {
-        User::logout();
         session()->clear('id');
         return true;
     }

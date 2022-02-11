@@ -44,7 +44,8 @@ class Middleware
     private function runMiddlewares(string $httpMethod, string $uri, Request $request): Request
     {
         $routeMiddleware = app()->settings->app['routeMiddleware'];
-
+/*        var_dump($uri);
+        die();*/
         foreach ($this->getMiddlewaresForRoute($httpMethod, $uri) as $middleware) {
             $args = explode(':', $middleware);
             $request = (new $routeMiddleware[$args[0]])->handle($request, $args[1]?? null) ?? $request;

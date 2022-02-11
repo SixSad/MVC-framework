@@ -12,6 +12,8 @@ return [
         'auth' => \Middlewares\AuthMiddleware::class,
         'doctor' => \Middlewares\DoctorMiddleware::class,
         'admin' => \Middlewares\AdminMiddleware::class,
+        'token' => \Middlewares\TokenMiddleware::class,
+        'doctorapi' => \Middlewares\DoctorApiMiddleware::class,
     ],
     'validators' => [
         'required' => \Validators\RequireValidator::class,

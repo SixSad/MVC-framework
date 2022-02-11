@@ -10,6 +10,7 @@ class Application
     private array $providers = [];
     //Данные приложения
     private array $binds = [];
+    private Settings $settings;
 
     public function __construct(array $settings = [])
     {
@@ -42,7 +43,7 @@ class Application
         }
     }
 
-    //Публичный метод для добавления данных в приложение
+    //Публичный метод для добавления данных в приложение+
     public function bind(string $key, $value): void
     {
         $this->binds[$key] = $value;
